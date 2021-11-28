@@ -9,25 +9,13 @@
 
     <!-- dialog -->
     <el-dialog
-      title="提示"
+      title="编辑内容"
       v-model="dialogVisible"
       width="40%"
       :before-close="handleClose"
     >
       <div class="dialog-content">
-        <el-form
-          label-position="top"
-          label-width="100px"
-          :model="formLabelAlign"
-        >
-          <template v-for="item in header" :key="item.prop">
-            <el-form-item :label="$t(item.label)">
-              <el-input
-                :placeholder="tbData[currEditIndex][item.prop]"
-              ></el-input>
-            </el-form-item>
-          </template>
-        </el-form>
+        <g-from :header="header" :value="tbData[currEditIndex]"></g-from>
       </div>
       <template #footer>
         <span class="dialog-footer">
@@ -69,10 +57,13 @@
           </template>
           <el-table-column fixed="right">
             <template #default="scope">
-              <el-button size="mini" type="primary" @click="openEditBox(scope.$index)"
-              >编辑</el-button
-            >
-              </template>
+              <el-button
+                size="mini"
+                type="primary"
+                @click="openEditBox(scope.$index)"
+                >编辑</el-button
+              >
+            </template>
           </el-table-column>
         </el-table>
       </template>
@@ -102,8 +93,9 @@ import ExportSheet from "./sheet.vue";
 import Toolbar from "@/components/toolbar.vue";
 import { ToolbarEvent } from "@/types";
 import { userRecords } from "@/api/user.api";
-import { valueToLabel } from "@/utils";
+import { valueToLabel, hasOwn } from "@/utils";
 import { GenderOptions } from "@/config";
+import GFrom from "./form.vue";
 
 const header = [
   {
@@ -126,6 +118,11 @@ const header = [
     prop: "gender",
     label: "message.gender",
     width: 180,
+    $type: "select",
+    $ops: [
+      { label: "男", value: 1 },
+      { label: "女", value: 2 },
+    ],
   },
   {
     prop: "province",
@@ -141,12 +138,13 @@ const header = [
     prop: "birthday",
     label: "message.birthday",
     width: 180,
+    $type: "date",
   },
 ];
 
 export default defineComponent({
   name: "user-record",
-  components: { Panel, Toolbar, ExportSheet },
+  components: { Panel, Toolbar, ExportSheet, GFrom },
   setup() {
     const tbData = ref([]);
     const loading = ref<boolean>(false);
@@ -232,6 +230,7 @@ export default defineComponent({
       renderHeader,
       dialogVisible,
       currEditIndex,
+      hasOwn,
       openEditBox,
       handleSizeChange,
       handleMenuClick,
@@ -240,6 +239,38 @@ export default defineComponent({
     };
   },
 });
+
+/**
+ * 
+ * 
+ * <el-form
+          label-position="top"
+          label-width="100px"
+          :model="formLabelAlign"
+        >
+          <template v-for="item in header" :key="item.prop">
+            <el-form-item v-if="hasOwn(item, 'prop')" :label="$t(item.label)">
+              <template v-if="hasOwn(item, '$type')">
+                <el-select v-if="item.$type === 'select'" style="width: 100%">
+                  <el-option v-for="o in item.$range" :key="o" :label="o">
+                  </el-option>
+                </el-select>
+                <el-date-picker
+                  style="width: 100%"
+                  v-if="item.$type === 'date'"
+                  type="date"
+                  placeholder="Pick a day"
+                >
+                </el-date-picker>
+              </template>
+              <el-input
+                v-else
+                :placeholder="tbData[currEditIndex][item.prop]"
+              ></el-input>
+            </el-form-item>
+          </template>
+        </el-form>
+ */
 </script>
 
 <style lang="scss" scoped>
