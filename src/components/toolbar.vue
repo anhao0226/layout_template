@@ -1,7 +1,7 @@
 <template>
   <div class="toolbar-wrapper">
     <div class="container">
-      <div class="menu-left">
+      <!-- <div class="menu-left">
         <span style="display: inline-block">
           <div class="breadcrumb">
             <el-breadcrumb separator-icon="ri-arrow-right-s-line">
@@ -15,7 +15,7 @@
             </el-breadcrumb>
           </div>
         </span>
-      </div>
+      </div> -->
       <div class="menu-right">
         <template v-for="item in items" :key="item.prop">
           <el-badge v-if="item.badge" :is-dot="showDot" class="badge-item">
@@ -230,7 +230,7 @@ export default defineComponent({
   display: flex;
   flex-direction: row;
   align-items: center;
-  
+
   &:last-child span {
     color: #97a8be !important;
   }

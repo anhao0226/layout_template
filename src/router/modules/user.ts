@@ -10,13 +10,13 @@ const userRouter = {
             path: "info",
             name: "user-info",
             meta: { title: "message.userinfo", show: true, keepAlive: false },
-            component: () => import("@/views/user/details.vue"),
+            component: () => import("@/views/user/record.vue"),
         },
         {
             path: "record",
             name: "user-record",
             meta: { title: "message.statistics", show: true, keepAlive: false },
-            component: () => import("@/views/user/record.vue"),
+            component: () => import("@/views/user/details.vue"),
         }
     ]
 }

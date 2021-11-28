@@ -6,6 +6,39 @@
       :data="tbData"
       v-model:visible="exportVisible"
     ></export-sheet>
+
+    <!-- dialog -->
+    <el-dialog
+      title="提示"
+      v-model="dialogVisible"
+      width="40%"
+      :before-close="handleClose"
+    >
+      <div class="dialog-content">
+        <el-form
+          label-position="top"
+          label-width="100px"
+          :model="formLabelAlign"
+        >
+          <template v-for="item in header" :key="item.prop">
+            <el-form-item :label="$t(item.label)">
+              <el-input
+                :placeholder="tbData[currEditIndex][item.prop]"
+              ></el-input>
+            </el-form-item>
+          </template>
+        </el-form>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogVisible = false"
+            >确 定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
+
     <!-- panel -->
     <Panel>
       <template #header>
@@ -23,6 +56,7 @@
           v-loading="loading"
           @select="handleSelectionChange"
         >
+          <!--  -->
           <template v-for="item in renderHeader" :key="item.label">
             <el-table-column
               :label="item.label && $t(item.label)"
@@ -33,6 +67,13 @@
               :fixed="item.fixed"
             />
           </template>
+          <el-table-column fixed="right">
+            <template #default="scope">
+              <el-button size="mini" type="primary" @click="openEditBox(scope.$index)"
+              >编辑</el-button
+            >
+              </template>
+          </el-table-column>
         </el-table>
       </template>
       <!-- footer -->
@@ -116,6 +157,9 @@ export default defineComponent({
     let multipleSelection = [];
     let pageSize = 10;
 
+    const dialogVisible = ref(false),
+      currEditIndex = ref(0);
+
     onMounted(() => {
       fetchUserData(1, pageSize);
     });
@@ -157,13 +201,21 @@ export default defineComponent({
       item.gender = valueToLabel(GenderOptions, item.gender);
     };
 
+    const openEditBox = (index: number) => {
+      dialogVisible.value = true;
+      currEditIndex.value = index;
+    };
+
     const fetchUserData = (pageNo = 1, pageSize = 10) => {
       loading.value = true;
       userRecords()
         .then((res) => {
-          console.log("======================",res);
           res.forEach(formatData);
+          console.log(res);
           tbData.value = res as any;
+          for (let i = 0; i < 30; i++) {
+            tbData.value.push((res as [])[i % 3]);
+          }
         })
         .finally(() => {
           loading.value = false;
@@ -178,6 +230,9 @@ export default defineComponent({
       showDot,
       exportVisible,
       renderHeader,
+      dialogVisible,
+      currEditIndex,
+      openEditBox,
       handleSizeChange,
       handleMenuClick,
       handleCurrentChange,
@@ -192,8 +247,13 @@ export default defineComponent({
   padding: 0;
 }
 
-:deep(.el-table__header .el-table__cell) {
-  // background-color: rgba($color: #000000, $alpha: 0.02);
+.dialog-content {
+  height: 400px;
+}
+
+:deep(.el-dialog__header) {
+  border-bottom: 1px solid #eee;
+  padding: 20px;
 }
 
 .container {
