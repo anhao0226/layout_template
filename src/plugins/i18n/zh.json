@@ -1,0 +1,23 @@
+{
+    "message": {
+        "home": "首页",
+        "component": "组件",
+        "table": "表格",
+        "config": "配置",
+        "admin": "平台管理",
+        "user": "用户",
+        "company": "公司",
+        "reload": "重新加载",
+        "info": "信息",
+        "closeCurrentTab": "关闭当前标签页",
+        "closeLeftTabs": "关闭左侧标签页",
+        "closeRightTabs": "关闭右侧标签页",
+        "userManage": "用户管理",
+        "userinfo": "用户信息",
+        "userRecord": "用户记录",
+        "notice": "榜文管理",
+        "notice-pedding": "待处理榜文",
+        "notice-reviewed": "已处理榜文",
+        "notice-publish": "发布榜文"
+    }
+}

@@ -1,0 +1,110 @@
+:root {
+    --bs-font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+        "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --bs-transition: 0.28s;
+    --bs-sidebar-background-color: #fff;
+    --bs-sidebar-color: #409eff;
+    --bs-color: rgba(0, 0, 0, 0.2);
+    --bs-background-color: #fff;
+    --bs-tag-font-color: #666;
+    --bs-font-color: #666;
+    --bs-icon-color: #303133;
+    --bs-border-color: #dcdfe6;
+    --bs-menu-hover-background-color: #ecf5ff;
+    --bs-breadcrumb-color: #666;
+    --bs-sidebar-select-color: #409eff;
+
+    // dark
+    --bs-color--dark: rgba(0, 0, 0, 0.2);
+    --bs-background-color--dark: #606266;
+    --bs-tag-font-color--dark: rgba(255, 255, 255, 0.7); // tag #666
+    --bs-font-color--dark: rgba(255, 255, 255, 0.7);
+    --bs-icon-color--dark: rgba(255, 255, 255, 0.7); // #303133
+    --bs-border-color--dark: #909399; // #dcdfe6
+    --bs-menu-hover-background-color--dark: rgba(255, 255, 255, 0.6) !important;
+    --bs-breadcrumb-color--dark: #fff !important;
+    // default
+    --bs-color--default: rgba(0, 0, 0, 0.2);
+    --bs-background-color--default: #fff;
+    --bs-tag-font-color--default: #666;
+    --bs-font-color--default: #666;
+    --bs-icon-color--default: #303133;
+    --bs-border-color--default: #dcdfe6;
+    --bs-menu-hover-background-color--default: #ecf5ff;
+    --bs-breadcrumb-color--default: #666;
+    --bs-sidebar-select-color--default: #409eff;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100vh;
+    font-family: var(--bs-font-family) !important;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+*,
+:after,
+:before {
+    box-sizing: border-box;
+}
+
+#app {
+    width: 100%;
+    height: 100vh;
+}
+
+::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+::-webkit-scrollbar-thumb {
+    width: 6px;
+    min-height: 15px;
+    background: var(--bs-color) !important;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    color: brown;
+    background: rgba($color: #000000, $alpha: 0.9);
+}
+
+:deep(.el-table__header .el-table__cell) {
+    background-color: rgba($color: #000000, $alpha: 0.02) !important;
+}
+
+$base-height: 47px;
+
+.icon_nav01 {
+    width: $base-height;
+    height: $base-height;
+    line-height: $base-height;
+    display: inline-block;
+    text-align: center;
+    font-size: 1.18rem;
+    color: var(--bs-breadcrumb-color);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.icon_anim_rotate {
+    &:hover {
+        transform: rotate(90deg);
+    }
+}

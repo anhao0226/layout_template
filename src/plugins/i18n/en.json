@@ -1,0 +1,21 @@
+{
+    "message": {
+        "home": "Home",
+        "component": "Component",
+        "table": "Table",
+        "config": "Config",
+        "admin": "Admin Manage",
+        "user": "User",
+        "company": "Company",
+        "reload": "Reload",
+        "info": "Info",
+        "closeCurrentTab": "Close Current Tab",
+        "closeLeftTabs": "Close Left Tabs",
+        "closeRightTabs": "Close Right Tabs",
+        "userManage": "User Manage",
+        "userinfo": "Info",
+        "userRecord": "Record",
+        "notice": "Notice",
+        "notice-pedding": "Notice Pedding"
+    }
+}
