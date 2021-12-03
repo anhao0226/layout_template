@@ -7,25 +7,12 @@
       v-model:visible="exportVisible"
     ></export-sheet>
 
-    <!-- dialog -->
-    <el-dialog
-      title="编辑内容"
+    <g-from
+      :header="header"
       v-model="dialogVisible"
-      width="40%"
-      :before-close="handleClose"
-    >
-      <div class="dialog-content">
-        <g-from :header="header" :value="tbData[currEditIndex]"></g-from>
-      </div>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogVisible = false"
-            >确 定</el-button
-          >
-        </span>
-      </template>
-    </el-dialog>
+      @submit="handleSubmit"
+      title="编辑类容"
+    ></g-from>
 
     <!-- panel -->
     <Panel>
@@ -167,6 +154,9 @@ export default defineComponent({
         case ToolbarEvent.Refresh:
           fetchUserData(1, pageSize);
           break;
+        case ToolbarEvent.Add:
+          dialogVisible.value = true;
+          break;
         case ToolbarEvent.Fields:
           loading.value = true;
           setTimeout(() => {
@@ -204,16 +194,16 @@ export default defineComponent({
       currEditIndex.value = index;
     };
 
+    const handleSubmit = (v: any) => {
+      console.log(v);
+    };
+
     const fetchUserData = (pageNo = 1, pageSize = 10) => {
       loading.value = true;
       userRecords()
         .then((res) => {
           res.forEach(formatData);
-          console.log(res);
           tbData.value = res as any;
-          for (let i = 0; i < 30; i++) {
-            tbData.value.push((res as [])[i % 3]);
-          }
         })
         .finally(() => {
           loading.value = false;
@@ -230,6 +220,7 @@ export default defineComponent({
       renderHeader,
       dialogVisible,
       currEditIndex,
+      handleSubmit,
       hasOwn,
       openEditBox,
       handleSizeChange,
@@ -239,38 +230,6 @@ export default defineComponent({
     };
   },
 });
-
-/**
- * 
- * 
- * <el-form
-          label-position="top"
-          label-width="100px"
-          :model="formLabelAlign"
-        >
-          <template v-for="item in header" :key="item.prop">
-            <el-form-item v-if="hasOwn(item, 'prop')" :label="$t(item.label)">
-              <template v-if="hasOwn(item, '$type')">
-                <el-select v-if="item.$type === 'select'" style="width: 100%">
-                  <el-option v-for="o in item.$range" :key="o" :label="o">
-                  </el-option>
-                </el-select>
-                <el-date-picker
-                  style="width: 100%"
-                  v-if="item.$type === 'date'"
-                  type="date"
-                  placeholder="Pick a day"
-                >
-                </el-date-picker>
-              </template>
-              <el-input
-                v-else
-                :placeholder="tbData[currEditIndex][item.prop]"
-              ></el-input>
-            </el-form-item>
-          </template>
-        </el-form>
- */
 </script>
 
 <style lang="scss" scoped>

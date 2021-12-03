@@ -1,21 +1,6 @@
 <template>
   <div class="toolbar-wrapper">
     <div class="container">
-      <!-- <div class="menu-left">
-        <span style="display: inline-block">
-          <div class="breadcrumb">
-            <el-breadcrumb separator-icon="ri-arrow-right-s-line">
-              <transition-group name="list" tag="div">
-                <template v-for="item in breadcrumbList" :key="item.path">
-                  <el-breadcrumb-item>{{
-                    $t(item.meta.title)
-                  }}</el-breadcrumb-item>
-                </template>
-              </transition-group>
-            </el-breadcrumb>
-          </div>
-        </span>
-      </div> -->
       <div class="menu-right">
         <template v-for="item in items" :key="item.prop">
           <el-badge v-if="item.badge" :is-dot="showDot" class="badge-item">
@@ -70,7 +55,7 @@
           icon="ri-add-line"
           size="small"
           type="primary"
-          @click="menuClick(item.prop)"
+          @click="menuClick(ToolbarEvent.Add)"
         >
           {{ $t("message.add") }}
         </el-button>
@@ -86,6 +71,7 @@ import { ToolbarEvent } from "@/types";
 import { RouteRecordRaw, useRoute } from "vue-router";
 import homeRouter from "@/router/modules/home";
 import { useAppStore } from "@/store";
+import { definePropType } from "element-plus/es/utils/props";
 
 interface Item {
   icon: string;
@@ -134,7 +120,10 @@ const defaultItems: Item[] = [
 export default defineComponent({
   name: "toolbar",
   props: {
-    fields: Array,
+    fields: {
+      type: Array,
+      default: definePropType<[]>([]),
+    },
     showDot: Boolean,
   },
   emits: ["click"],
@@ -142,36 +131,10 @@ export default defineComponent({
     const items = ref<Item[]>([...defaultItems]);
     const inputValue = ref<string>("");
     const checked = ref<string[]>([]);
-    const store = useAppStore();
     let fieldsList: Item[] = Object.assign(toRaw(props.fields || []));
     let prevCheckedLength = fieldsList.length;
     const breadcrumbList = ref<RouteRecordRaw[]>([]);
-    const route = useRoute();
 
-    const handleRouteChange = () => {
-      if (isHomeRoute(route.path)) {
-        breadcrumbList.value = [homeRouter.children[0]];
-      } else {
-        const matched = route.matched.filter((item) => {
-          return item.meta && item.meta.title;
-        });
-        breadcrumbList.value = [...matched];
-      }
-    };
-
-    handleRouteChange();
-
-    watch(
-      () => route.path,
-      (newValue: string) => {
-        handleRouteChange();
-        newValue = isHomeRoute(newValue) ? "/" : newValue;
-        if (route.name !== "redirect" && !isInvalidRoute(newValue)) {
-          store.menuToggle(newValue);
-        }
-      }
-    );
-    // init
     fieldsList = fieldsList.filter((item: any) => {
       const hasLabel = hasOwn(item, "label") && item.label;
       hasLabel && checked.value.push(item.label);
@@ -196,6 +159,7 @@ export default defineComponent({
       checked,
       fieldsList,
       breadcrumbList,
+      ToolbarEvent,
       menuClick,
       haneleDropdownState,
     };

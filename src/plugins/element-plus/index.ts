@@ -50,6 +50,7 @@ import {
     ElTabs,
     ElBadge,
     ElInputNumber,
+    ElNotification,
 } from "element-plus";
 
 const components = [
@@ -102,6 +103,7 @@ const components = [
     ElPagination,
     ElBadge,
     ElInputNumber,
+    ElNotification,
 ];
 
 const plugins = [ElLoading];

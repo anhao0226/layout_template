@@ -1,6 +1,6 @@
 
 import { hasOwn, isArray } from "@/utils";
-import { defineComponent, h, ref, VNode } from "vue";
+import { Component, defineComponent, h, ref, VNode } from "vue";
 import { ElButton, ElSelect, ElOption, ElInput, ElDatePicker, ElForm, ElFormItem } from "element-plus"
 import i18n from "@/plugins/i18n"
 
@@ -8,7 +8,7 @@ const defaultStyle = {
     width: "100%"
 }
 
-const name = ref({ email: "", gender: "", city: "" })
+let value: any = null;
 
 const components: Record<string, VNode> = {
     "date": h(ElDatePicker, { style: defaultStyle }),
@@ -17,9 +17,11 @@ const components: Record<string, VNode> = {
 }
 
 const createSelectComponent = (ops: string[]): VNode => {
-    const comps: VNode[] = [];
-    // ops.forEach(item => comps.push(h(ElOption, item)))
-    return h(ElSelect, { style: defaultStyle }, comps)
+    const options: VNode[] = [];
+    ops.forEach(item => options.push(h(ElOption, null, { label: "" })))
+    return h(ElSelect, { style: defaultStyle }, {
+        defaul: () => options
+    })
 }
 
 const createFormItem = (label: string, node: VNode): VNode => {
@@ -30,8 +32,8 @@ const createFormItem = (label: string, node: VNode): VNode => {
 
 const createInputComponent = (placeholder: string, obj: any, prop: string) => {
     return h(ElInput, {
-        placeholder, modelValue: (name.value as any)[prop],
-        'onUpdate:modelValue': value => { (name.value as any)[prop] = value }
+        placeholder, modelValue: (value.value as any)[prop],
+        'onUpdate:modelValue': v => { (value.value as any)[prop] = v }
     })
 }
 
@@ -40,17 +42,58 @@ const buildVNode = (type: string, label: string) => {
 }
 
 
+export function buildCityComponent() {
+    return defineComponent({
+        props: ["modelValue", "options"],
+        emits: ["update:modelValue"],
+    })
+}
 
 
-export default defineComponent({
-    props: ["header", "default"],
+export function buildSelectComponent(ops?: { label: string, value: number }[]): Component {
+    return defineComponent({
+        props: ["modelValue", "options"],
+        emits: ["update:modelValue"],
+        render() {
+            return h(
+                ElSelect,
+                {
+                    modelValue: this.modelValue,
+                    onChange: (value) => {
+                        this.$emit("update:modelValue", value)
+                    },
+                    style: {
+                        width: "100%"
+                    }
+                },
+                {
+                    default: () => {
+                        const options: VNode[] = [];
+                        const _ops = [...(ops || []), ...(this.$props.options || [])]
+                        _ops.forEach(({ label, value }) => options.push(h(ElOption, { label, value })))
+                        return options;
+                    },
+                }
+            );
+        }
+    })
+}
+
+
+
+export const t = defineComponent({
+    data() {
+        return {
+
+        }
+    },
+    props: ["header", "value"],
     render() {
+        value = ref(Object.assign({}, this.$props.value));
         const items: VNode[] = [];
         if (hasOwn(this.$props, "header") && isArray(this.$props.header)) {
-            const value = ref({});
             this.$props.header.forEach((item: { $type: string, label: string, $ops: string[], prop: string }) => {
                 if (hasOwn(item, "prop")) {
-                    (value.value as any)[item.prop] = ""
                     switch (item.$type) {
                         // case "date":
                         //     items.push(createFormItem(item.label, components[item.$type]));

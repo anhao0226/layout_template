@@ -55,7 +55,7 @@ import { defineComponent } from "@vue/runtime-core";
 import { ref } from "vue";
 import { userRegister, userLogin } from "@/api/user.api";
 import Register from "./register.vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElNotification } from "element-plus";
 
 export default defineComponent({
   setup() {
@@ -79,7 +79,11 @@ export default defineComponent({
       } else {
         // login
         userLogin(ruleForm.value).then((res) => {
-          ElMessage({ type: "success", message: "登陆成功" });
+          ElNotification({
+            title: "Success",
+            message: "登陆成功",
+            type: "success",
+          });
           router.push("/welcome");
         });
       }
